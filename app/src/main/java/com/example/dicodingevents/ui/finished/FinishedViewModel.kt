@@ -1,5 +1,8 @@
 package com.example.dicodingevents.ui.finished
 
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,13 +10,8 @@ import androidx.lifecycle.ViewModel
 import com.example.dicodingevents.data.response.DicodingEvent
 import com.example.dicodingevents.data.response.EventsResponse
 import com.example.dicodingevents.data.retrofit.ApiConfig
-import com.example.dicodingevents.ui.finished.FinishedViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class FinishedViewModel : ViewModel() {
-
     private val _listFinished = MutableLiveData<List<DicodingEvent>>()
     val listFinished: LiveData<List<DicodingEvent>> = _listFinished
     private val _isLoading = MutableLiveData<Boolean>()
@@ -25,10 +23,6 @@ class FinishedViewModel : ViewModel() {
 
     init {
         getFinished()
-    }
-
-    companion object{
-        private const val TAG = "FinishedViewModel"
     }
 
     internal fun getFinished() {
@@ -60,7 +54,7 @@ class FinishedViewModel : ViewModel() {
             override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isLoading.value = false
                 _isError.value = true
-                Log.e(FinishedViewModel.TAG, "onFailure: ${t.message}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }
@@ -94,8 +88,12 @@ class FinishedViewModel : ViewModel() {
             override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isLoading.value = false
                 _isError.value = true
-                Log.e(FinishedViewModel.TAG, "onFailure: ${t.message}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+
+    companion object{
+        private const val TAG = "FinishedViewModel"
     }
 }

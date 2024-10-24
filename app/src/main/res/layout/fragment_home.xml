@@ -8,7 +8,6 @@
     tools:context=".ui.home.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +45,6 @@
                     app:layout_constraintTop_toTopOf="@+id/iv_user_profile" />
 
                 <TextView
-                    android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -61,7 +59,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/tv_explore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -69,7 +66,6 @@
                 android:textSize="48sp" />
 
             <TextView
-                android:id="@+id/tv_upcoming_event"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -82,7 +78,6 @@
                 layout="@layout/list_events_card" />
 
             <TextView
-                android:id="@+id/tv_finished_event"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

@@ -12,7 +12,6 @@ import com.example.dicodingevents.databinding.FragmentFinishedBinding
 import com.example.dicodingevents.ui.adapter.EventItemAdapter
 
 class FinishedFragment : Fragment() {
-
     private var _binding: FragmentFinishedBinding? = null
     private val binding get() = _binding!!
 
@@ -22,7 +21,7 @@ class FinishedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val finishedViewModel =
-            ViewModelProvider(this).get(FinishedViewModel::class.java)
+            ViewModelProvider(this)[FinishedViewModel::class.java]
 
         _binding = FragmentFinishedBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -33,7 +32,6 @@ class FinishedFragment : Fragment() {
                 .editText
                 .setOnEditorActionListener { textView, actionId, event ->
 
-                    //handle search with empty string
                     if (textView.text.toString().isEmpty()) {
                         searchBar.setText("")
                         searchView.hide()
@@ -41,7 +39,6 @@ class FinishedFragment : Fragment() {
                         return@setOnEditorActionListener true
                     }
 
-                    // handle back button
                     searchView.editText.setOnFocusChangeListener { _, hasFocus ->
                         if (!hasFocus) {
                             searchBar.setText("")
@@ -84,34 +81,32 @@ class FinishedFragment : Fragment() {
     }
 
     private fun showEmptyState(isEmpty: Boolean) {
-        if (isEmpty) {
-            binding.includeListEvents.rvEvents.visibility = View.GONE
-            binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.VISIBLE
-        } else {
-            binding.includeListEvents.rvEvents.visibility = View.VISIBLE
-            binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
+        binding.includeListEvents.apply {
+            rvEvents.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            emptyStateContainer.emptyStateContainer.visibility = if (isEmpty) View.VISIBLE else View.GONE
         }
     }
 
     private fun showErrorState(isError: Boolean) {
-        if (isError) {
-            binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.VISIBLE
-            binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
-            binding.includeListEvents.rvEvents.visibility = View.GONE
-        } else {
-            binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.GONE
+        binding.includeListEvents.apply {
+            errorStateContainer.errorStateContainer.visibility = if (isError) View.VISIBLE else View.GONE
+            if (isError) {
+                rvEvents.visibility = View.GONE
+                emptyStateContainer.emptyStateContainer.visibility = View.GONE
+            }
         }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.includeListEvents.loadingIndicatorEvents.visibility = View.VISIBLE
-            binding.includeListEvents.rvEvents.visibility = View.GONE
-            binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
-            binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.GONE
-        } else {
-            binding.includeListEvents.rvEvents.visibility = View.VISIBLE
-            binding.includeListEvents.loadingIndicatorEvents.visibility = View.GONE
+        binding.includeListEvents.apply {
+            loadingIndicatorEvents.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isLoading) {
+                rvEvents.visibility = View.GONE
+                emptyStateContainer.emptyStateContainer.visibility = View.GONE
+                errorStateContainer.errorStateContainer.visibility = View.GONE
+            } else {
+                rvEvents.visibility = View.VISIBLE
+            }
         }
     }
 

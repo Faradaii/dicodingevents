@@ -1,5 +1,8 @@
 package com.example.dicodingevents.ui.home
 
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,14 +10,8 @@ import androidx.lifecycle.ViewModel
 import com.example.dicodingevents.data.response.DicodingEvent
 import com.example.dicodingevents.data.response.EventsResponse
 import com.example.dicodingevents.data.retrofit.ApiConfig
-import com.example.dicodingevents.ui.home.HomeViewModel
-import com.example.dicodingevents.ui.upcoming.UpcomingViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
-
     private val _listFinished = MutableLiveData<List<DicodingEvent>>()
     val listFinished: LiveData<List<DicodingEvent>> = _listFinished
     private val _listUpcoming = MutableLiveData<List<DicodingEvent>>()
@@ -31,10 +28,6 @@ class HomeViewModel : ViewModel() {
     val isUpcomingEmpty: LiveData<Boolean> = _isUpcomingEmpty
     private val _isFinishedEmpty = MutableLiveData<Boolean>()
     val isFinishedEmpty: LiveData<Boolean> = _isFinishedEmpty
-
-    companion object{
-        private const val TAG = "HomeViewModel"
-    }
 
     init {
         getUpcoming()
@@ -70,7 +63,7 @@ class HomeViewModel : ViewModel() {
             override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isUpcomingLoading.value = false
                 _isUpcomingError.value = true
-                Log.e(HomeViewModel.TAG, "onFailure: ${t.message}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }
@@ -97,15 +90,19 @@ class HomeViewModel : ViewModel() {
                     }
                 } else {
                     _isFinishedError.value = true
-                    Log.e(HomeViewModel.TAG, "onFailure: ${response.message()}")
+                    Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isFinishedLoading.value = false
                 _isFinishedError.value = true
-                Log.e(HomeViewModel.TAG, "onFailure: ${t.message}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+
+    companion object{
+        private const val TAG = "HomeViewModel"
     }
 }

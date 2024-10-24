@@ -12,7 +12,6 @@ import com.example.dicodingevents.databinding.FragmentUpcomingBinding
 import com.example.dicodingevents.ui.adapter.EventItemAdapter
 
 class UpcomingFragment : Fragment() {
-
     private var _binding: FragmentUpcomingBinding? = null
     private val binding get() = _binding!!
 
@@ -22,7 +21,7 @@ class UpcomingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val upcomingViewModel =
-            ViewModelProvider(this).get(UpcomingViewModel::class.java)
+            ViewModelProvider(this)[UpcomingViewModel::class.java]
 
         _binding = FragmentUpcomingBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -84,34 +83,32 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun showEmptyState(isEmpty: Boolean) {
-        if (isEmpty) {
-            binding.includeListEvents.rvEvents.visibility = View.GONE
-            binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.VISIBLE
-        } else {
-            binding.includeListEvents.rvEvents.visibility = View.VISIBLE
-            binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
+        binding.includeListEvents.apply {
+            rvEvents.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            emptyStateContainer.emptyStateContainer.visibility = if (isEmpty) View.VISIBLE else View.GONE
         }
     }
 
     private fun showErrorState(isError: Boolean) {
-        if (isError) {
-            binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.VISIBLE
-            binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
-            binding.includeListEvents.rvEvents.visibility = View.GONE
-        } else {
-            binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.GONE
+        binding.includeListEvents.apply {
+            errorStateContainer.errorStateContainer.visibility = if (isError) View.VISIBLE else View.GONE
+            if (isError) {
+                emptyStateContainer.emptyStateContainer.visibility = View.GONE
+                rvEvents.visibility = View.GONE
+            }
         }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.includeListEvents.loadingIndicatorEvents.visibility = View.VISIBLE
-            binding.includeListEvents.rvEvents.visibility = View.GONE
-            binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
-            binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.GONE
-        } else {
-            binding.includeListEvents.rvEvents.visibility = View.VISIBLE
-            binding.includeListEvents.loadingIndicatorEvents.visibility = View.GONE
+        binding.includeListEvents.apply {
+            loadingIndicatorEvents.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isLoading) {
+                rvEvents.visibility = View.GONE
+                emptyStateContainer.emptyStateContainer.visibility = View.GONE
+                errorStateContainer.errorStateContainer.visibility = View.GONE
+            } else {
+                rvEvents.visibility = View.VISIBLE
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.dicodingevents.ui.adapter
 
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.content.Intent
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -7,8 +9,6 @@ import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.dicodingevents.ui.event_detail.EventDetailActivity
 import com.example.dicodingevents.R
 import com.example.dicodingevents.data.response.DicodingEvent
@@ -21,30 +21,35 @@ class EventCardItemAdapter : ListAdapter<DicodingEvent, EventCardItemAdapter.MyV
         val binding = EventCardItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val event = getItem(position)
         holder.bind(event)
     }
+
     class MyViewHolder(private val binding: EventCardItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(eventsItem: DicodingEvent){
-            binding.tvEventName.text = eventsItem.name
-            binding.tvEventCardOwner.text = SpannableStringBuilder("${eventsItem.ownerName} *").apply {
-                setSpan(ImageSpan(binding.root.context, R.drawable.baseline_verified_24), eventsItem.ownerName.length+1, eventsItem.ownerName.length+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
-            Glide.with(binding.root.context)
-                .load(eventsItem.mediaCover)
-                .transform(RoundedCorners(50))
-                .placeholder(R.drawable.baseline_image_placeholder_24)
-                .error(R.drawable.baseline_broken_image_24)
-                .into(binding.ivEventImage)
+            binding.apply {
+                tvEventName.text = eventsItem.name
+                tvEventCardOwner.text = SpannableStringBuilder("${eventsItem.ownerName} *").apply {
+                    setSpan(ImageSpan(root.context, R.drawable.baseline_verified_24), eventsItem.ownerName.length+1, eventsItem.ownerName.length+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                Glide.with(root.context)
+                    .load(eventsItem.mediaCover)
+                    .transform(RoundedCorners(50))
+                    .placeholder(R.drawable.baseline_image_placeholder_24)
+                    .error(R.drawable.baseline_broken_image_24)
+                    .into(ivEventImage)
 
-            binding.root.setOnClickListener {
-                val intent = Intent(it.context, EventDetailActivity::class.java)
-                intent.putExtra(EventDetailActivity.EXTRA_ID, eventsItem.id)
-                it.context.startActivity(intent)
+                root.setOnClickListener {
+                    val intent = Intent(it.context, EventDetailActivity::class.java)
+                    intent.putExtra(EventDetailActivity.EXTRA_ID, eventsItem.id)
+                    it.context.startActivity(intent)
+                }
             }
         }
     }
+
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DicodingEvent>() {
             override fun areItemsTheSame(oldItem: DicodingEvent, newItem: DicodingEvent): Boolean {

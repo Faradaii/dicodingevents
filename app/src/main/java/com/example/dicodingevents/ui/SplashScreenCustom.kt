@@ -16,6 +16,10 @@ class SplashScreenCustom : AppCompatActivity() {
         android.os.Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, MainNavigation::class.java))
             finish()
-        }, 2000)
+        }, SPLASH_DURATION)
+    }
+
+    companion object {
+        private const val SPLASH_DURATION = 2000L
     }
 }
