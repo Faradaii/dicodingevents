@@ -7,6 +7,11 @@
         android:title="@string/title_home" />
 
     <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/baseline_search_24"
+        android:title="@string/search" />
+
+    <item
         android:id="@+id/navigation_upcoming"
         android:icon="@drawable/baseline_calendar_month_24"
         android:title="@string/title_upcoming" />
@@ -16,4 +21,10 @@
         android:icon="@drawable/baseline_done_all_24"
         android:title="@string/title_finished" />
 
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/baseline_person_24"
+        android:title="@string/profile" />
+
 </menu>
+

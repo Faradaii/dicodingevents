@@ -1,17 +1,19 @@
 package com.example.dicodingevents.ui.adapter
 
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.dicodingevents.R
-import com.example.dicodingevents.ui.event_detail.EventDetailActivity
-import com.example.dicodingevents.data.response.DicodingEvent
+import com.example.dicodingevents.data.local.entity.DicodingEventEntity
 import com.example.dicodingevents.databinding.EventItemBinding
+import com.example.dicodingevents.ui.event_detail.EventDetailActivity
 
-class EventItemAdapter : ListAdapter<DicodingEvent, EventItemAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class EventItemAdapter : ListAdapter<DicodingEventEntity, EventItemAdapter.MyViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = EventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
@@ -23,7 +25,7 @@ class EventItemAdapter : ListAdapter<DicodingEvent, EventItemAdapter.MyViewHolde
     }
 
     class MyViewHolder(private val binding: EventItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(eventsItem: DicodingEvent){
+        fun bind(eventsItem: DicodingEventEntity){
             binding.apply {
                 tvEventName.text = eventsItem.name
                 tvEventSummary.text = eventsItem.summary
@@ -45,11 +47,11 @@ class EventItemAdapter : ListAdapter<DicodingEvent, EventItemAdapter.MyViewHolde
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DicodingEvent>() {
-            override fun areItemsTheSame(oldItem: DicodingEvent, newItem: DicodingEvent): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DicodingEventEntity>() {
+            override fun areItemsTheSame(oldItem: DicodingEventEntity, newItem: DicodingEventEntity): Boolean {
                 return oldItem == newItem
             }
-            override fun areContentsTheSame(oldItem: DicodingEvent, newItem: DicodingEvent): Boolean {
+            override fun areContentsTheSame(oldItem: DicodingEventEntity, newItem: DicodingEventEntity): Boolean {
                 return oldItem == newItem
             }
         }

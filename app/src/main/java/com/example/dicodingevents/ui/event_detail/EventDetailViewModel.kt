@@ -1,55 +1,31 @@
 package com.example.dicodingevents.ui.event_detail
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.dicodingevents.data.response.DicodingEvent
-import com.example.dicodingevents.data.response.EventDetailResponse
-import com.example.dicodingevents.data.retrofit.ApiConfig
+import androidx.lifecycle.viewModelScope
+import com.example.dicodingevents.data.DicodingEventRepository
+import com.example.dicodingevents.data.local.entity.DicodingEventEntity
+import kotlinx.coroutines.launch
 
-class EventDetailViewModel : ViewModel() {
-    private val _detailEvent = MutableLiveData<DicodingEvent>()
-    val detailEvent: LiveData<DicodingEvent> = _detailEvent
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
-    private val _isError = MutableLiveData<Boolean>()
-    val isError: LiveData<Boolean> = _isError
+class EventDetailViewModel(private val dicodingEventRepository: DicodingEventRepository) : ViewModel() {
 
-    internal fun getDetailEvent(eventId: Int) {
-        _isLoading.value = true
-        val client = ApiConfig.getApiService().getEventDetail(eventId)
-        Log.d(TAG,("getDetailEvent: $eventId"))
-        client.enqueue(object : Callback<EventDetailResponse> {
-            override fun onResponse(
-                call: Call<EventDetailResponse>,
-                response: Response<EventDetailResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _isError.value = false
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        _detailEvent.value = responseBody.event
-                    }
-                } else {
-                    _isError.value = true
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
+    fun getDetailEvent(id: Int) = dicodingEventRepository.getDetailDicodingEvent(id)
 
-            override fun onFailure(call: Call<EventDetailResponse>, t: Throwable) {
-                _isLoading.value = false
-                _isError.value = true
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
+    fun favoriteDicodingEvent(dicodingEvent: DicodingEventEntity) {
+        viewModelScope.launch {
+            dicodingEventRepository.setDicodingEventFavorite(dicodingEvent, favoriteState = true)
+        }
     }
 
-    companion object{
-        private const val TAG = "EventDetailViewModel"
+    fun unfavoriteDicodingEvent(dicodingEvent: DicodingEventEntity) {
+        viewModelScope.launch {
+            dicodingEventRepository.setDicodingEventFavorite(dicodingEvent, favoriteState = false)
+        }
     }
+
+    fun viewedDicodingEvent(dicodingEvent: DicodingEventEntity) {
+        viewModelScope.launch {
+            dicodingEventRepository.setDicodingEventViewed(dicodingEvent, viewedState = true)
+        }
+    }
+
 }

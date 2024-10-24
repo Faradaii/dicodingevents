@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="5dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginEnd="5dp"
-    android:layout_marginBottom="4dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
     android:elevation="0dp"
     android:outlineProvider="none"
     app:cardBackgroundColor="@color/white"
@@ -19,10 +19,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:fadingEdge="none"
         android:outlineProvider="none">
 
@@ -31,35 +31,60 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:maxLines="2"
-            android:minLines="2"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:minLines="1"
             android:text="@string/event_name"
+            android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_event_card_owner" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_card_date" />
 
         <TextView
-            android:id="@+id/tv_event_card_owner"
+            android:id="@+id/tv_event_card_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/event_owner"
+            android:text="@string/event_date"
+            android:textAllCaps="true"
+            android:textColor="@color/md_theme_tertiary"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_event_image" />
 
+        <TextView
+            android:id="@+id/tv_event_card_participant"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Event Participant"
+            android:textColor="@color/md_theme_tertiary"
+            android:textColorLink="@color/md_theme_tertiary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/map_icon3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/map_icon3"
+            app:layout_constraintTop_toTopOf="@+id/map_icon3" />
+
         <ImageView
             android:id="@+id/iv_event_image"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="190dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/event_name"
             android:scaleType="fitXY"
@@ -70,6 +95,46 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_optimizationLevel="ratio"
             tools:srcCompat="@tools:sample/backgrounds/scenic[0]" />
+
+        <ImageView
+            android:id="@+id/map_icon2"
+            android:layout_width="19dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/event_city_name"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/map_icon3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_name"
+            app:srcCompat="@drawable/baseline_place_grey_24" />
+
+        <ImageView
+            android:id="@+id/map_icon3"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/event_city_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/collapse_three_avatar" />
+
+        <TextView
+            android:id="@+id/tv_event_city_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/event_city_name"
+            android:textColor="@color/md_theme_outline"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/map_icon2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/map_icon2"
+            app:layout_constraintTop_toTopOf="@+id/map_icon2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
