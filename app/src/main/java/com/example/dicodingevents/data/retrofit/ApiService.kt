@@ -1,9 +1,9 @@
 package com.example.dicodingevents.data.retrofit
 
-import com.example.dicodingevents.data.response.EventDetailResponse
-import com.example.dicodingevents.data.response.EventsResponse
 import retrofit2.http.*
 import retrofit2.Call
+import com.example.dicodingevents.data.response.EventDetailResponse
+import com.example.dicodingevents.data.response.EventsResponse
 
 interface ApiService {
     @GET("events")

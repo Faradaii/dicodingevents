@@ -1,5 +1,8 @@
 package com.example.dicodingevents.ui.upcoming
 
+import retrofit2.Response
+import retrofit2.Call
+import retrofit2.Callback
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,10 +10,6 @@ import androidx.lifecycle.ViewModel
 import com.example.dicodingevents.data.response.DicodingEvent
 import com.example.dicodingevents.data.response.EventsResponse
 import com.example.dicodingevents.data.retrofit.ApiConfig
-import com.example.dicodingevents.ui.finished.FinishedViewModel
-import retrofit2.Response
-import retrofit2.Call
-import retrofit2.Callback
 
 class UpcomingViewModel : ViewModel() {
     private val _listUpcoming = MutableLiveData<List<DicodingEvent>>()
@@ -24,10 +23,6 @@ class UpcomingViewModel : ViewModel() {
 
     init {
         getUpcoming()
-    }
-
-    companion object{
-        private const val TAG = "UpcomingViewModel"
     }
 
     internal fun getUpcoming() {
@@ -59,7 +54,7 @@ class UpcomingViewModel : ViewModel() {
             override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isLoading.value = false
                 _isError.value = true
-                Log.e(UpcomingViewModel.TAG, "onFailure: ${t.message}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }
@@ -93,8 +88,12 @@ class UpcomingViewModel : ViewModel() {
             override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isLoading.value = false
                 _isError.value = true
-                Log.e(UpcomingViewModel.TAG, "onFailure: ${t.message}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+
+    companion object{
+        private const val TAG = "UpcomingViewModel"
     }
 }

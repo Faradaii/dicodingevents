@@ -3,7 +3,6 @@ package com.example.dicodingevents.data.response
 import com.google.gson.annotations.SerializedName
 
 data class EventDetailResponse(
-
 	@field:SerializedName("error")
 	val error: Boolean,
 

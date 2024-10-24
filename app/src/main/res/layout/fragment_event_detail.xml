@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/event_detail_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.event_detail.EventDetailFragment">
@@ -56,7 +55,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="Date"
+                android:text="@string/date"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/bt_event_register"
@@ -121,10 +120,10 @@
                     android:layout_height="231dp"
                     android:contentDescription="@string/event_name"
                     android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_event_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_event_name" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_event_name2"
@@ -222,7 +221,7 @@
                             app:layout_constraintBottom_toBottomOf="@+id/tv_event_owner_text"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/tv_event_owner"
-                            tools:src="@mipmap/ic_launcher_round" />
+                            tools:src="@mipmap/icon_launcher_round" />
 
                         <TextView
                             android:id="@+id/tv_event_owner"
@@ -257,7 +256,11 @@
 
     <include
         android:id="@+id/error_state_container"
-        layout="@layout/error_state" />
+        layout="@layout/error_state"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"

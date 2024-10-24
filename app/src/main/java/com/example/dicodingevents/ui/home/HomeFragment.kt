@@ -1,5 +1,7 @@
 package com.example.dicodingevents.ui.home
 
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.dicodingevents.R
 import com.example.dicodingevents.data.response.DicodingEvent
 import com.example.dicodingevents.databinding.FragmentHomeBinding
@@ -16,11 +16,7 @@ import com.example.dicodingevents.ui.adapter.EventCardItemAdapter
 import com.example.dicodingevents.ui.adapter.EventItemAdapter
 
 class HomeFragment : Fragment() {
-
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -29,7 +25,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -90,67 +86,61 @@ class HomeFragment : Fragment() {
     }
 
     private fun showEmptyState(isEmpty: Boolean, section: Enum<Section>) {
-        if (isEmpty) {
-            if (Section.UPCOMING == section) {
-                binding.includeListEventsCard.rvEventsCard.visibility = View.GONE
-                binding.includeListEventsCard.emptyStateContainer.emptyStateContainer.visibility = View.VISIBLE
-            } else {
-                binding.includeListEvents.rvEvents.visibility = View.GONE
-                binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.VISIBLE
+        if (Section.UPCOMING == section) {
+            binding.includeListEventsCard.apply {
+                rvEventsCard.visibility = if (isEmpty) View.GONE else View.VISIBLE
+                emptyStateContainer.emptyStateContainer.visibility = if (isEmpty) View.VISIBLE else View.GONE
             }
         } else {
-            if (Section.UPCOMING == section) {
-                binding.includeListEventsCard.rvEventsCard.visibility = View.VISIBLE
-                binding.includeListEventsCard.emptyStateContainer.emptyStateContainer.visibility = View.GONE
-            } else {
-                binding.includeListEvents.rvEvents.visibility = View.VISIBLE
-                binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
+            binding.includeListEvents.apply {
+                rvEvents.visibility = if (isEmpty) View.GONE else View.VISIBLE
+                emptyStateContainer.emptyStateContainer.visibility = if (isEmpty) View.VISIBLE else View.GONE
             }
         }
     }
 
     private fun showErrorState(isError: Boolean, section: Enum<Section>) {
-        if (isError) {
-            if (Section.UPCOMING == section) {
-                binding.includeListEventsCard.rvEventsCard.visibility = View.GONE
-                binding.includeListEventsCard.errorStateContainer.errorStateContainer.visibility = View.VISIBLE
-                binding.includeListEventsCard.emptyStateContainer.emptyStateContainer.visibility = View.GONE
-            } else {
-                binding.includeListEvents.rvEvents.visibility = View.GONE
-                binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.VISIBLE
-                binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
+        if (Section.UPCOMING == section) {
+            binding.includeListEventsCard.apply {
+                errorStateContainer.errorStateContainer.visibility = if (isError) View.VISIBLE else View.GONE
+                if (isError) {
+                    rvEventsCard.visibility = View.GONE
+                    emptyStateContainer.emptyStateContainer.visibility = View.GONE
+                }
             }
         } else {
-            if (Section.UPCOMING == section) {
-                binding.includeListEventsCard.errorStateContainer.errorStateContainer.visibility = View.GONE
-                binding.includeListEventsCard.emptyStateContainer.emptyStateContainer.visibility = View.GONE
-            } else {
-                binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.GONE
-                binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
+            binding.includeListEvents.apply {
+                errorStateContainer.errorStateContainer.visibility = if (isError) View.VISIBLE else View.GONE
+                if (isError) {
+                    rvEvents.visibility = View.GONE
+                    emptyStateContainer.emptyStateContainer.visibility = View.GONE
+                }
             }
         }
     }
 
     private fun showLoading(isLoading: Boolean, section: Enum<Section>) {
-        if (isLoading) {
-            if (Section.UPCOMING == section) {
-                binding.includeListEventsCard.loadingIndicatorEventsCard.visibility = View.VISIBLE
-                binding.includeListEventsCard.rvEventsCard.visibility = View.GONE
-                binding.includeListEventsCard.errorStateContainer.errorStateContainer.visibility = View.GONE
-                binding.includeListEventsCard.emptyStateContainer.emptyStateContainer.visibility = View.GONE
-            } else {
-                binding.includeListEvents.loadingIndicatorEvents.visibility = View.VISIBLE
-                binding.includeListEvents.rvEvents.visibility = View.GONE
-                binding.includeListEvents.errorStateContainer.errorStateContainer.visibility = View.GONE
-                binding.includeListEvents.emptyStateContainer.emptyStateContainer.visibility = View.GONE
+        if (Section.UPCOMING == section) {
+            binding.includeListEventsCard.apply {
+                loadingIndicatorEventsCard.visibility = if (isLoading) View.VISIBLE else View.GONE
+                if (isLoading) {
+                    rvEventsCard.visibility = View.GONE
+                    errorStateContainer.errorStateContainer.visibility = View.GONE
+                    emptyStateContainer.emptyStateContainer.visibility = View.GONE
+                } else {
+                    rvEventsCard.visibility = View.VISIBLE
+                }
             }
         } else {
-            if (Section.UPCOMING == section) {
-                binding.includeListEventsCard.loadingIndicatorEventsCard.visibility = View.GONE
-                binding.includeListEventsCard.rvEventsCard.visibility = View.VISIBLE
-            } else {
-                binding.includeListEvents.loadingIndicatorEvents.visibility = View.GONE
-                binding.includeListEvents.rvEvents.visibility = View.VISIBLE
+            binding.includeListEvents.apply {
+                loadingIndicatorEvents.visibility = if (isLoading) View.VISIBLE else View.GONE
+                if (isLoading) {
+                    rvEvents.visibility = View.GONE
+                    errorStateContainer.errorStateContainer.visibility = View.GONE
+                    emptyStateContainer.emptyStateContainer.visibility = View.GONE
+                } else {
+                    rvEvents.visibility = View.VISIBLE
+                }
             }
         }
     }

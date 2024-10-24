@@ -3,7 +3,6 @@ package com.example.dicodingevents.data.response
 import com.google.gson.annotations.SerializedName
 
 data class EventsResponse(
-
 	@field:SerializedName("listEvents")
 	val listEvents: List<DicodingEvent> = listOf(),
 
@@ -15,7 +14,6 @@ data class EventsResponse(
 )
 
 data class DicodingEvent(
-
 	@field:SerializedName("summary")
 	val summary: String,
 

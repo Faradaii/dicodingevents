@@ -1,5 +1,8 @@
 package com.example.dicodingevents.ui.event_detail
 
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,9 +10,6 @@ import androidx.lifecycle.ViewModel
 import com.example.dicodingevents.data.response.DicodingEvent
 import com.example.dicodingevents.data.response.EventDetailResponse
 import com.example.dicodingevents.data.retrofit.ApiConfig
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class EventDetailViewModel : ViewModel() {
     private val _detailEvent = MutableLiveData<DicodingEvent>()
@@ -18,10 +18,6 @@ class EventDetailViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
     private val _isError = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> = _isError
-
-    companion object{
-        private const val TAG = "EventDetailViewModel"
-    }
 
     internal fun getDetailEvent(eventId: Int) {
         _isLoading.value = true
@@ -48,9 +44,12 @@ class EventDetailViewModel : ViewModel() {
             override fun onFailure(call: Call<EventDetailResponse>, t: Throwable) {
                 _isLoading.value = false
                 _isError.value = true
-                Log.e(EventDetailViewModel.TAG, "onFailure: ${t.message}")
+                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }
 
+    companion object{
+        private const val TAG = "EventDetailViewModel"
+    }
 }
