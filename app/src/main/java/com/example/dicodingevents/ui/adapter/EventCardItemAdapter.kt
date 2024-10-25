@@ -1,20 +1,20 @@
 package com.example.dicodingevents.ui.adapter
 
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.content.Intent
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.*
-import com.example.dicodingevents.ui.event_detail.EventDetailActivity
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.dicodingevents.R
-import com.example.dicodingevents.data.response.DicodingEvent
+import com.example.dicodingevents.data.local.entity.DicodingEventEntity
 import com.example.dicodingevents.databinding.EventCardItemBinding
+import com.example.dicodingevents.ui.event_detail.EventDetailActivity
+import com.example.dicodingevents.utils.DateTimeUtils
 
-class EventCardItemAdapter : ListAdapter<DicodingEvent, EventCardItemAdapter.MyViewHolder>(
+class EventCardItemAdapter : ListAdapter<DicodingEventEntity, EventCardItemAdapter.MyViewHolder>(
     DIFF_CALLBACK
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -28,15 +28,15 @@ class EventCardItemAdapter : ListAdapter<DicodingEvent, EventCardItemAdapter.MyV
     }
 
     class MyViewHolder(private val binding: EventCardItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(eventsItem: DicodingEvent){
+        fun bind(eventsItem: DicodingEventEntity){
             binding.apply {
                 tvEventName.text = eventsItem.name
-                tvEventCardOwner.text = SpannableStringBuilder("${eventsItem.ownerName} *").apply {
-                    setSpan(ImageSpan(root.context, R.drawable.baseline_verified_24), eventsItem.ownerName.length+1, eventsItem.ownerName.length+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
+                tvEventCardDate.text = DateTimeUtils.formatDateShorter(eventsItem.beginTime)
+                tvEventCityName.text = "${eventsItem.cityName} • ${eventsItem.category}"
+                tvEventCardParticipant.text = "+${eventsItem.registrants-3} Participants"
                 Glide.with(root.context)
                     .load(eventsItem.mediaCover)
-                    .transform(RoundedCorners(50))
+                    .transform(RoundedCorners(60))
                     .placeholder(R.drawable.baseline_image_placeholder_24)
                     .error(R.drawable.baseline_broken_image_24)
                     .into(ivEventImage)
@@ -51,11 +51,11 @@ class EventCardItemAdapter : ListAdapter<DicodingEvent, EventCardItemAdapter.MyV
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DicodingEvent>() {
-            override fun areItemsTheSame(oldItem: DicodingEvent, newItem: DicodingEvent): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DicodingEventEntity>() {
+            override fun areItemsTheSame(oldItem: DicodingEventEntity, newItem: DicodingEventEntity): Boolean {
                 return oldItem == newItem
             }
-            override fun areContentsTheSame(oldItem: DicodingEvent, newItem: DicodingEvent): Boolean {
+            override fun areContentsTheSame(oldItem: DicodingEventEntity, newItem: DicodingEventEntity): Boolean {
                 return oldItem == newItem
             }
         }

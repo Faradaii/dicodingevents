@@ -1,19 +1,18 @@
 package com.example.dicodingevents.ui.home
 
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dicodingevents.R
-import com.example.dicodingevents.data.response.DicodingEvent
+import com.example.dicodingevents.data.Result
+import com.example.dicodingevents.data.local.entity.DicodingEventEntity
 import com.example.dicodingevents.databinding.FragmentHomeBinding
+import com.example.dicodingevents.ui.ViewModelFactory
 import com.example.dicodingevents.ui.adapter.EventCardItemAdapter
-import com.example.dicodingevents.ui.adapter.EventItemAdapter
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -24,76 +23,113 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this)[HomeViewModel::class.java]
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        homeViewModel.isUpcomingLoading.observe(viewLifecycleOwner) {
-            showLoading(it, Section.UPCOMING)
-        }
-
-        homeViewModel.isFinishedLoading.observe(viewLifecycleOwner) {
-            showLoading(it, Section.FINISHED)
-        }
-
-        homeViewModel.isUpcomingError.observe(viewLifecycleOwner) {
-            showErrorState(it, Section.UPCOMING)
-        }
-
-        homeViewModel.isFinishedError.observe(viewLifecycleOwner) {
-            showErrorState(it, Section.FINISHED)
-        }
-
-        homeViewModel.isUpcomingEmpty.observe(viewLifecycleOwner) {
-            showEmptyState(it, Section.UPCOMING)
-        }
-
-        homeViewModel.isFinishedEmpty.observe(viewLifecycleOwner) {
-            showEmptyState(it, Section.FINISHED)
-        }
-
-        val layoutManager = LinearLayoutManager(requireActivity())
-        binding.includeListEvents.rvEvents.layoutManager = layoutManager
-
-        val layoutManagerCard = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includeListEventsCard.rvEventsCard.layoutManager = layoutManagerCard
-
-        homeViewModel.listFinished.observe(requireActivity()) { dicodingevent ->
-            setEventsData(dicodingevent)
-        }
-
-        homeViewModel.listUpcoming.observe(requireActivity()) { dicodingevent ->
-            setEventsCardData(dicodingevent)
-        }
-
-        Glide.with(binding.root.context).load(R.drawable.dicoding_logo).transform(RoundedCorners(50)).into(binding.ivUserProfile)
 
         return root
     }
 
-    private fun setEventsData(dicodingEvents: List<DicodingEvent>){
-        val adapter = EventItemAdapter()
-        adapter.submitList(dicodingEvents)
-        binding.includeListEvents.rvEvents.adapter = adapter
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
+        val viewModel: HomeViewModel by viewModels {
+            factory
+        }
+
+        viewModel.getUpcomingEvents().observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        showErrorState(isError = false, Section.UPCOMING)
+                        showEmptyState(isEmpty = false, Section.UPCOMING)
+                        showLoading(isLoading = true, Section.UPCOMING)
+                    }
+                    is Result.Success -> {
+                        showLoading(isLoading = false, Section.UPCOMING)
+                        showErrorState(isError = false, Section.UPCOMING)
+                        val dicodingEvents = result.data
+                        setEventsCardDataHorizontal(dicodingEvents)
+                    }
+                    is Result.Error -> {
+                        showLoading(isLoading = false, Section.UPCOMING)
+                        showEmptyState(isEmpty = false, Section.UPCOMING)
+                        showErrorState(isError = true, Section.UPCOMING)
+                        Toast.makeText(
+                            context,
+                            "Terjadi kesalahan" + result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+
+        viewModel.getFinishedEvents().observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        showErrorState(isError = false, Section.FINISHED)
+                        showEmptyState(isEmpty = false, Section.FINISHED)
+                        showLoading(isLoading = true, Section.FINISHED)
+                    }
+                    is Result.Success -> {
+                        showLoading(isLoading = false, Section.FINISHED)
+                        showErrorState(isError = false, Section.FINISHED)
+                        val dicodingEvents = result.data
+                        setEventsCardDataVertical(dicodingEvents)
+                    }
+                    is Result.Error -> {
+                        showLoading(isLoading = false, Section.FINISHED)
+                        showEmptyState(isEmpty = false, Section.FINISHED)
+                        showErrorState(isError = true, Section.FINISHED)
+                        Toast.makeText(
+                            context,
+                            "Terjadi kesalahan" + result.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+
+        binding.includeListEventsCardHorizontal.rvEventsCard.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+        binding.includeListEventsCardVertical.rvEventsCard.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+        }
     }
 
-    private fun setEventsCardData(dicodingEvents: List<DicodingEvent>){
+    private fun setEventsCardDataHorizontal(dicodingEvents: List<DicodingEventEntity>){
         val adapter = EventCardItemAdapter()
         adapter.submitList(dicodingEvents)
-        binding.includeListEventsCard.rvEventsCard.adapter = adapter
+        binding.includeListEventsCardHorizontal.rvEventsCard.adapter = adapter
+
+        if (dicodingEvents.isEmpty()) {
+            showEmptyState(isEmpty = true, Section.UPCOMING)
+        }
+    }
+
+    private fun setEventsCardDataVertical(dicodingEvents: List<DicodingEventEntity>){
+        val adapter = EventCardItemAdapter()
+        adapter.submitList(dicodingEvents)
+        binding.includeListEventsCardVertical.rvEventsCard.adapter = adapter
+
+        if (dicodingEvents.isEmpty()) {
+            showEmptyState(isEmpty = true, Section.FINISHED)
+        }
     }
 
     private fun showEmptyState(isEmpty: Boolean, section: Enum<Section>) {
         if (Section.UPCOMING == section) {
-            binding.includeListEventsCard.apply {
+            binding.includeListEventsCardHorizontal.apply {
                 rvEventsCard.visibility = if (isEmpty) View.GONE else View.VISIBLE
                 emptyStateContainer.emptyStateContainer.visibility = if (isEmpty) View.VISIBLE else View.GONE
             }
         } else {
-            binding.includeListEvents.apply {
-                rvEvents.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            binding.includeListEventsCardVertical.apply {
+                rvEventsCard.visibility = if (isEmpty) View.GONE else View.VISIBLE
                 emptyStateContainer.emptyStateContainer.visibility = if (isEmpty) View.VISIBLE else View.GONE
             }
         }
@@ -101,7 +137,7 @@ class HomeFragment : Fragment() {
 
     private fun showErrorState(isError: Boolean, section: Enum<Section>) {
         if (Section.UPCOMING == section) {
-            binding.includeListEventsCard.apply {
+            binding.includeListEventsCardHorizontal.apply {
                 errorStateContainer.errorStateContainer.visibility = if (isError) View.VISIBLE else View.GONE
                 if (isError) {
                     rvEventsCard.visibility = View.GONE
@@ -109,10 +145,10 @@ class HomeFragment : Fragment() {
                 }
             }
         } else {
-            binding.includeListEvents.apply {
+            binding.includeListEventsCardVertical.apply {
                 errorStateContainer.errorStateContainer.visibility = if (isError) View.VISIBLE else View.GONE
                 if (isError) {
-                    rvEvents.visibility = View.GONE
+                    rvEventsCard.visibility = View.GONE
                     emptyStateContainer.emptyStateContainer.visibility = View.GONE
                 }
             }
@@ -121,7 +157,7 @@ class HomeFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean, section: Enum<Section>) {
         if (Section.UPCOMING == section) {
-            binding.includeListEventsCard.apply {
+            binding.includeListEventsCardHorizontal.apply {
                 loadingIndicatorEventsCard.visibility = if (isLoading) View.VISIBLE else View.GONE
                 if (isLoading) {
                     rvEventsCard.visibility = View.GONE
@@ -132,14 +168,14 @@ class HomeFragment : Fragment() {
                 }
             }
         } else {
-            binding.includeListEvents.apply {
-                loadingIndicatorEvents.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.includeListEventsCardVertical.apply {
+                loadingIndicatorEventsCard.visibility = if (isLoading) View.VISIBLE else View.GONE
                 if (isLoading) {
-                    rvEvents.visibility = View.GONE
+                    rvEventsCard.visibility = View.GONE
                     errorStateContainer.errorStateContainer.visibility = View.GONE
                     emptyStateContainer.emptyStateContainer.visibility = View.GONE
                 } else {
-                    rvEvents.visibility = View.VISIBLE
+                    rvEventsCard.visibility = View.VISIBLE
                 }
             }
         }

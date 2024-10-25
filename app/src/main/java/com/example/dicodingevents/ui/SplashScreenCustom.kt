@@ -20,6 +20,6 @@ class SplashScreenCustom : AppCompatActivity() {
     }
 
     companion object {
-        private const val SPLASH_DURATION = 2000L
+        private const val SPLASH_DURATION = 1000L
     }
 }

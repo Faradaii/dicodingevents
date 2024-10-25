@@ -1,10 +1,10 @@
-package com.example.dicodingevents.data.retrofit
+package com.example.dicodingevents.data.remote.retrofit
 
+import com.example.dicodingevents.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.example.dicodingevents.BuildConfig
 
 class ApiConfig {
     companion object{
