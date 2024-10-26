@@ -1,7 +1,7 @@
 package com.example.dicodingevents.ui.event_detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.dicodingevents.R
 import com.example.dicodingevents.databinding.ActivityEventDetailBinding
 
@@ -15,10 +15,11 @@ class EventDetailActivity : AppCompatActivity() {
         setContentView(activityEventDetailBinding.root)
 
         val id = intent.getIntExtra(EXTRA_ID, 0)
+        val name = intent.getStringExtra(EXTRA_NAME)
 
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Event Detail"
+        supportActionBar?.title = name
 
 
         if (savedInstanceState == null) {
@@ -30,11 +31,12 @@ class EventDetailActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 
     companion object {
         const val EXTRA_ID = "extra_id"
+        const val EXTRA_NAME = "extra_name"
     }
 }

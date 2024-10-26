@@ -3,7 +3,6 @@ package com.example.dicodingevents.ui.event_detail
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ImageSpan
@@ -11,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -58,14 +59,32 @@ class EventDetailFragment : Fragment() {
                         val dicodingEvents = result.data
                         setEvent(dicodingEvents)
 
-                        viewModel.viewedDicodingEvent(dicodingEvents)
+                        if (!dicodingEvents.isViewed) {
+                            viewModel.viewedDicodingEvent(dicodingEvents)
+                        }
+
+                        with(binding){
+                            if (dicodingEvents.isFavorite) {
+                                fabFavorite.setImageDrawable(ContextCompat.getDrawable(fabFavorite.context, R.drawable.baseline_favorite_24))
+                            } else {
+                                fabFavorite.setImageDrawable(ContextCompat.getDrawable(fabFavorite.context, R.drawable.baseline_favorite_border_24))
+                            }
+
+                            fabFavorite.setOnClickListener{
+                                if (dicodingEvents.isFavorite) {
+                                    viewModel.unFavoriteDicodingEvent(dicodingEvents)
+                                } else {
+                                    viewModel.favoriteDicodingEvent(dicodingEvents)
+                                }
+                            }
+                        }
                     }
                     is Result.Error -> {
                         showLoading(isLoading = false)
                         showErrorState(isError = true)
                         Toast.makeText(
                             context,
-                            "Terjadi kesalahan" + result.error,
+                            "Please check your connection!",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -77,20 +96,32 @@ class EventDetailFragment : Fragment() {
     private fun setEvent(event: DicodingEventEntity) {
         with(binding) {
             tvEventName.text = event.name
-            tvEventInfo.text = "This event ${if (DateTimeUtils.isUpcomingChecker(event.endTime)) "has not started yet!" else "has ended!"}"
+            tvEventInfo.text = buildString {
+                append("This event ")
+                append(if (DateTimeUtils.isUpcomingChecker(event.endTime)) "has not started yet!" else "has ended!")
+            }
             tvEventCategory.text = event.category
             btEventStatus.text = if (DateTimeUtils.isUpcomingChecker(event.endTime)) (if(event.quota - event.registrants >= 0) "Available" else "Full") else "Closed"
-            btEventSlot.text = "${event.registrants}/${event.quota} (${event.quota - event.registrants} seat available)"
+            btEventSlot.text = buildString {
+                append(event.registrants)
+                append("/")
+                append(event.quota)
+                append(" (")
+                append(event.quota - event.registrants)
+                append(" seat available)")
+            }
             tvEventTime.text = DateTimeUtils.formatDateWithTimezone(event.beginTime)
             tvEventOwner.text = SpannableStringBuilder("${event.ownerName} *").apply {
                 setSpan(ImageSpan(root.context, R.drawable.baseline_verified_24), event.ownerName.length+1, event.ownerName.length+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            tvEventDescription.text = Html.fromHtml(event.description)
+            tvEventDescription.text = HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
             btEventRegister.setOnClickListener {
 
                 if (event.quota - event.registrants == 0) {
-                    Toast.makeText(root.context, "Sorry, this event is full/closed", Toast.LENGTH_SHORT).show()
-                } else {
+                    Toast.makeText(root.context, "Sorry, this event is full", Toast.LENGTH_SHORT).show()
+                } else if (!DateTimeUtils.isUpcomingChecker(event.endTime)) {
+                    Toast.makeText(root.context, "Sorry, this event is closed", Toast.LENGTH_SHORT).show()
+                }else {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(event.link))
                     startActivity(intent)
                 }
@@ -109,26 +140,31 @@ class EventDetailFragment : Fragment() {
                 .placeholder(R.drawable.baseline_image_placeholder_24)
                 .error(R.drawable.baseline_broken_image_24)
                 .into(ivLogoOwner)
+
         }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.scView.visibility = View.GONE
-            binding.errorStateContainer.errorStateContainer.visibility = View.GONE
-        } else {
-            binding.progressBar.visibility = View.GONE
-            binding.scView.visibility = View.VISIBLE
+        with(binding){
+            if (isLoading) {
+                progressBar.visibility = View.VISIBLE
+                scView.visibility = View.GONE
+                errorStateContainer.errorStateContainer.visibility = View.GONE
+            } else {
+                progressBar.visibility = View.GONE
+                scView.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun showErrorState(isError: Boolean) {
-        if (isError) {
-            binding.scView.visibility = View.GONE
-            binding.errorStateContainer.errorStateContainer.visibility = View.VISIBLE
-        } else {
-            binding.errorStateContainer.errorStateContainer.visibility = View.GONE
+        with(binding) {
+            if (isError) {
+                scView.visibility = View.GONE
+                errorStateContainer.errorStateContainer.visibility = View.VISIBLE
+            } else {
+                errorStateContainer.errorStateContainer.visibility = View.GONE
+            }
         }
     }
 

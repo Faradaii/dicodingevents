@@ -16,7 +16,7 @@ class EventDetailViewModel(private val dicodingEventRepository: DicodingEventRep
         }
     }
 
-    fun unfavoriteDicodingEvent(dicodingEvent: DicodingEventEntity) {
+    fun unFavoriteDicodingEvent(dicodingEvent: DicodingEventEntity) {
         viewModelScope.launch {
             dicodingEventRepository.setDicodingEventFavorite(dicodingEvent, favoriteState = false)
         }

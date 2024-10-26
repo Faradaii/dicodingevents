@@ -46,10 +46,14 @@ class HomeFragment : Fragment() {
                         showLoading(isLoading = true, Section.UPCOMING)
                     }
                     is Result.Success -> {
+                        val dicodingEvents = result.data
                         showLoading(isLoading = false, Section.UPCOMING)
                         showErrorState(isError = false, Section.UPCOMING)
-                        val dicodingEvents = result.data
-                        setEventsCardDataHorizontal(dicodingEvents)
+                        if (dicodingEvents.isEmpty()) {
+                            showEmptyState(isEmpty = true, Section.UPCOMING)
+                        } else {
+                            setEventsCardDataHorizontal(dicodingEvents)
+                        }
                     }
                     is Result.Error -> {
                         showLoading(isLoading = false, Section.UPCOMING)
@@ -57,7 +61,7 @@ class HomeFragment : Fragment() {
                         showErrorState(isError = true, Section.UPCOMING)
                         Toast.makeText(
                             context,
-                            "Terjadi kesalahan" + result.error,
+                            "Please check your connection!",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -74,10 +78,14 @@ class HomeFragment : Fragment() {
                         showLoading(isLoading = true, Section.FINISHED)
                     }
                     is Result.Success -> {
+                        val dicodingEvents = result.data
                         showLoading(isLoading = false, Section.FINISHED)
                         showErrorState(isError = false, Section.FINISHED)
-                        val dicodingEvents = result.data
-                        setEventsCardDataVertical(dicodingEvents)
+                        if (dicodingEvents.isEmpty()) {
+                            showEmptyState(isEmpty = true, Section.FINISHED)
+                        } else {
+                            setEventsCardDataVertical(dicodingEvents)
+                        }
                     }
                     is Result.Error -> {
                         showLoading(isLoading = false, Section.FINISHED)
@@ -85,7 +93,7 @@ class HomeFragment : Fragment() {
                         showErrorState(isError = true, Section.FINISHED)
                         Toast.makeText(
                             context,
-                            "Terjadi kesalahan" + result.error,
+                            "Please check your connection!",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -93,42 +101,40 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.includeListEventsCardHorizontal.rvEventsCard.apply {
+        binding.listEventsCardHorizontal.rvEventsCard.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
-        binding.includeListEventsCardVertical.rvEventsCard.apply {
+        binding.listEventsCardVertical.rvEventsCard.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
         }
     }
 
     private fun setEventsCardDataHorizontal(dicodingEvents: List<DicodingEventEntity>){
-        val adapter = EventCardItemAdapter()
-        adapter.submitList(dicodingEvents)
-        binding.includeListEventsCardHorizontal.rvEventsCard.adapter = adapter
-
         if (dicodingEvents.isEmpty()) {
             showEmptyState(isEmpty = true, Section.UPCOMING)
         }
+
+        val adapter = EventCardItemAdapter()
+        adapter.submitList(dicodingEvents)
+        binding.listEventsCardHorizontal.rvEventsCard.adapter = adapter
+
     }
 
     private fun setEventsCardDataVertical(dicodingEvents: List<DicodingEventEntity>){
         val adapter = EventCardItemAdapter()
         adapter.submitList(dicodingEvents)
-        binding.includeListEventsCardVertical.rvEventsCard.adapter = adapter
+        binding.listEventsCardVertical.rvEventsCard.adapter = adapter
 
-        if (dicodingEvents.isEmpty()) {
-            showEmptyState(isEmpty = true, Section.FINISHED)
-        }
     }
 
     private fun showEmptyState(isEmpty: Boolean, section: Enum<Section>) {
         if (Section.UPCOMING == section) {
-            binding.includeListEventsCardHorizontal.apply {
+            binding.listEventsCardHorizontal.apply {
                 rvEventsCard.visibility = if (isEmpty) View.GONE else View.VISIBLE
                 emptyStateContainer.emptyStateContainer.visibility = if (isEmpty) View.VISIBLE else View.GONE
             }
         } else {
-            binding.includeListEventsCardVertical.apply {
+            binding.listEventsCardVertical.apply {
                 rvEventsCard.visibility = if (isEmpty) View.GONE else View.VISIBLE
                 emptyStateContainer.emptyStateContainer.visibility = if (isEmpty) View.VISIBLE else View.GONE
             }
@@ -137,7 +143,7 @@ class HomeFragment : Fragment() {
 
     private fun showErrorState(isError: Boolean, section: Enum<Section>) {
         if (Section.UPCOMING == section) {
-            binding.includeListEventsCardHorizontal.apply {
+            binding.listEventsCardHorizontal.apply {
                 errorStateContainer.errorStateContainer.visibility = if (isError) View.VISIBLE else View.GONE
                 if (isError) {
                     rvEventsCard.visibility = View.GONE
@@ -145,7 +151,7 @@ class HomeFragment : Fragment() {
                 }
             }
         } else {
-            binding.includeListEventsCardVertical.apply {
+            binding.listEventsCardVertical.apply {
                 errorStateContainer.errorStateContainer.visibility = if (isError) View.VISIBLE else View.GONE
                 if (isError) {
                     rvEventsCard.visibility = View.GONE
@@ -157,8 +163,8 @@ class HomeFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean, section: Enum<Section>) {
         if (Section.UPCOMING == section) {
-            binding.includeListEventsCardHorizontal.apply {
-                loadingIndicatorEventsCard.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.listEventsCardHorizontal.apply {
+                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
                 if (isLoading) {
                     rvEventsCard.visibility = View.GONE
                     errorStateContainer.errorStateContainer.visibility = View.GONE
@@ -168,8 +174,8 @@ class HomeFragment : Fragment() {
                 }
             }
         } else {
-            binding.includeListEventsCardVertical.apply {
-                loadingIndicatorEventsCard.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.listEventsCardVertical.apply {
+                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
                 if (isLoading) {
                     rvEventsCard.visibility = View.GONE
                     errorStateContainer.errorStateContainer.visibility = View.GONE

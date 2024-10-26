@@ -32,8 +32,16 @@ class EventCardItemAdapter : ListAdapter<DicodingEventEntity, EventCardItemAdapt
             binding.apply {
                 tvEventName.text = eventsItem.name
                 tvEventCardDate.text = DateTimeUtils.formatDateShorter(eventsItem.beginTime)
-                tvEventCityName.text = "${eventsItem.cityName} • ${eventsItem.category}"
-                tvEventCardParticipant.text = "+${eventsItem.registrants-3} Participants"
+                tvEventCityName.text = buildString {
+                    append(eventsItem.cityName)
+                    append(" • ")
+                    append(eventsItem.category)
+                }
+                tvEventParticipant.text = buildString {
+                    append("+")
+                    append(eventsItem.registrants-3)
+                    append(" Participants Registered")
+                }
                 Glide.with(root.context)
                     .load(eventsItem.mediaCover)
                     .transform(RoundedCorners(60))
@@ -43,6 +51,7 @@ class EventCardItemAdapter : ListAdapter<DicodingEventEntity, EventCardItemAdapt
 
                 root.setOnClickListener {
                     val intent = Intent(it.context, EventDetailActivity::class.java)
+                    intent.putExtra(EventDetailActivity.EXTRA_NAME, eventsItem.name)
                     intent.putExtra(EventDetailActivity.EXTRA_ID, eventsItem.id)
                     it.context.startActivity(intent)
                 }

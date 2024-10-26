@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.SplashScreenCustom">
+    android:background="@color/md_theme_onPrimary"
+    tools:context=".ui.SplashScreenCustom"
+    tools:ignore="Overdraw">
 
     <TextView
         android:id="@+id/tv_author_name"
@@ -12,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="@string/author_name"
+        android:textColor="@color/md_theme_tertiary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/from"
+        android:textColor="@color/md_theme_primary"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/tv_author_name"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/dicoding"
+        android:textColor="@color/md_theme_primary"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/event"
+        android:textColor="@color/md_theme_primary"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
