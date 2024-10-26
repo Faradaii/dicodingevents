@@ -45,10 +45,15 @@ class FinishedFragment : Fragment() {
                         showLoading(isLoading = true)
                     }
                     is Result.Success -> {
+                        val dicodingEvents = result.data
                         showLoading(isLoading = false)
                         showErrorState(isError = false)
-                        val dicodingEvents = result.data
-                        setEventsData(dicodingEvents)
+                        if (dicodingEvents.isEmpty()) {
+                            showEmptyState(isEmpty = true)
+                        } else {
+                            setEventsData(dicodingEvents)
+                        }
+
                     }
                     is Result.Error -> {
                         showLoading(isLoading = false)
@@ -56,7 +61,7 @@ class FinishedFragment : Fragment() {
                         showErrorState(isError = true)
                         Toast.makeText(
                             context,
-                            "Terjadi kesalahan" + result.error,
+                            "Please check your connection!",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -65,7 +70,7 @@ class FinishedFragment : Fragment() {
         }
 
         binding.includeListEvents.rvEventsCard.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
 
@@ -74,9 +79,6 @@ class FinishedFragment : Fragment() {
         adapter.submitList(dicodingEvents)
         binding.includeListEvents.rvEventsCard.adapter = adapter
 
-        if (dicodingEvents.isEmpty()) {
-            showEmptyState(isEmpty = true)
-        }
     }
 
     private fun showEmptyState(isEmpty: Boolean) {
@@ -98,7 +100,7 @@ class FinishedFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.includeListEvents.apply {
-            loadingIndicatorEventsCard.visibility = if (isLoading) View.VISIBLE else View.GONE
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             if (isLoading) {
                 rvEventsCard.visibility = View.GONE
                 emptyStateContainer.emptyStateContainer.visibility = View.GONE

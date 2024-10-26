@@ -19,14 +19,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/explore_dicoding_events"
                 android:textSize="48sp" />
 
@@ -39,7 +37,7 @@
                 android:textSize="20sp" />
 
             <include
-                android:id="@+id/include_list_events_card_horizontal"
+                android:id="@+id/list_events_card_horizontal"
                 layout="@layout/list_events_card" />
 
             <TextView
@@ -50,7 +48,7 @@
                 android:textSize="20sp" />
 
             <include
-                android:id="@+id/include_list_events_card_vertical"
+                android:id="@+id/list_events_card_vertical"
                 layout="@layout/list_events_card" />
 
         </LinearLayout>

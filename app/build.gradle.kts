@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,4 +73,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.room.compiler)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.android.async.http)
 }

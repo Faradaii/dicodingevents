@@ -49,4 +49,15 @@ object DateTimeUtils {
         }
     }
 
+    fun getNextReminderDate(): String {
+        val calendar = Calendar.getInstance().apply {
+            timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+            add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        val updatedDate = calendar.time
+
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(updatedDate)
+    }
+
 }

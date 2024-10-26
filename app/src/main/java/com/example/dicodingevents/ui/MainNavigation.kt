@@ -1,6 +1,5 @@
 package com.example.dicodingevents.ui
 
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavHost
@@ -9,6 +8,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.dicodingevents.R
 import com.example.dicodingevents.databinding.ActivityMainNavigationBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainNavigation : AppCompatActivity() {
     private lateinit var binding: ActivityMainNavigationBinding
@@ -26,7 +26,7 @@ class MainNavigation : AppCompatActivity() {
         val navController = navigationHost.navController
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_upcoming, R.id.navigation_finished
+                R.id.navigation_home, R.id.navigation_search, R.id.navigation_upcoming, R.id.navigation_finished, R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
