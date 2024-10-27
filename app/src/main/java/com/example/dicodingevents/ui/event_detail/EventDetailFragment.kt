@@ -147,11 +147,11 @@ class EventDetailFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         with(binding){
             if (isLoading) {
-                progressBar.visibility = View.VISIBLE
+                progressBar.loadingStateContainer.visibility = View.VISIBLE
                 scView.visibility = View.GONE
                 errorStateContainer.errorStateContainer.visibility = View.GONE
             } else {
-                progressBar.visibility = View.GONE
+                progressBar.loadingStateContainer.visibility = View.GONE
                 scView.visibility = View.VISIBLE
             }
         }

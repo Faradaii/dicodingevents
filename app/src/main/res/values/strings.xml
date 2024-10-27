@@ -51,6 +51,8 @@
     <string name="to_provide_the_best_experience_we_need_access_to_certain_features_please_grant_the_required_permissions_to_continue">To provide the best experience, we need access to certain features. Please grant the required permissions to continue.</string>
     <string name="ready_to_search">Ready to Search?</string>
     <string name="start_by_typing_in_a_keyword_to_find_what_you_re_looking_for">Start by typing in a keyword to find what you\'re looking for.</string>
-    <string name="version_app">version 2.0.0\n</string>
+    <string name="version_app">version 2.0.0</string>
     <string name="about_author">Author - Faradaii</string>
+    <string name="loading_head">Please Wait</string>
+    <string name="loading_body">We\'re gathering your content. This may take a moment.</string>
 </resources>

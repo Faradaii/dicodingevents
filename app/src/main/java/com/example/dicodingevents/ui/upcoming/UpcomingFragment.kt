@@ -100,7 +100,7 @@ class UpcomingFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.includeListEvents.apply {
-            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            progressBar.loadingStateContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
             if (isLoading) {
                 rvEventsCard.visibility = View.GONE
                 emptyStateContainer.emptyStateContainer.visibility = View.GONE

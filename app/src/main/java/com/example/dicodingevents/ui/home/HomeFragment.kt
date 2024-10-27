@@ -164,7 +164,7 @@ class HomeFragment : Fragment() {
     private fun showLoading(isLoading: Boolean, section: Enum<Section>) {
         if (Section.UPCOMING == section) {
             binding.listEventsCardHorizontal.apply {
-                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                progressBar.loadingStateContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
                 if (isLoading) {
                     rvEventsCard.visibility = View.GONE
                     errorStateContainer.errorStateContainer.visibility = View.GONE
@@ -175,7 +175,7 @@ class HomeFragment : Fragment() {
             }
         } else {
             binding.listEventsCardVertical.apply {
-                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                progressBar.loadingStateContainer.visibility = if (isLoading) View.VISIBLE else View.GONE
                 if (isLoading) {
                     rvEventsCard.visibility = View.GONE
                     errorStateContainer.errorStateContainer.visibility = View.GONE
